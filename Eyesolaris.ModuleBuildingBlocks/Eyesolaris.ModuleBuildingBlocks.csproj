@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Eyesolaris's Dynamic Module Library</Title>
+    <Description>Eyesolaris's Library for Dynamic Objects and Modules</Description>
+    <Authors>Eyesolaris</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eyesolaris.Logging" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
