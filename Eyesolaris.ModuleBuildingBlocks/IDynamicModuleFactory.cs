@@ -3,6 +3,8 @@
     public interface IDynamicModuleFactory
     {
         string FactoryId { get; }
+
+        DynamicEntityName FactoryDynamicId => new(FactoryId, new Version(1, 0));
         IReadOnlyList<DynamicEntityName> SupportedModuleTypes { get; }
         IDynamicModule? CreateDynamicModule(DynamicEntityName id);
     }
