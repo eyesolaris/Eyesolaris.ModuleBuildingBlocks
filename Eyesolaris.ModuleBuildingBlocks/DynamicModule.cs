@@ -8,7 +8,7 @@ namespace Eyesolaris.DynamicLoading
 {
     public abstract class DynamicModule : RunnableObject, IDynamicModule
     {
-        public abstract DynamicEntityName ModuleId { get; }
+        public abstract DynamicEntityId ModuleId { get; }
         public abstract string Description { get; }
 
         protected DynamicModule(bool initializationNecessary)
