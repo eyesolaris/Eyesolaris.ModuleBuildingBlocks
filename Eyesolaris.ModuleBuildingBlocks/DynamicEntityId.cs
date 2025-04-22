@@ -7,12 +7,28 @@ namespace Eyesolaris.DynamicLoading
     /// </summary>
     public readonly struct DynamicEntityId : IEquatable<DynamicEntityId>, IComparable<DynamicEntityId>, IComparable
     {
+        /// <summary>
+        /// The exact entity identifier
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The <see cref="DynamicEntityIdTemplate"/> value is empty</exception>
         public readonly string Name => _innerValue.Name!;
 
+        /// <summary>
+        /// The exact entity version
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The <see cref="DynamicEntityIdTemplate"/> value is empty</exception>
         public readonly Version Version => _innerValue.Version!;
 
+        /// <summary>
+        /// Indicates whether the value was properly constructed
+        /// </summary>
         public readonly bool IsEmpty => _innerValue.IsEmpty;
 
+        /// <summary>
+        /// Constructs a dynamic entity ID
+        /// </summary>
+        /// <param name="name">An entity name</param>
+        /// <param name="version">An entity version</param>
         public DynamicEntityId(string name, Version version)
         {
             ArgumentNullException.ThrowIfNull(name, nameof(name));
@@ -25,9 +41,33 @@ namespace Eyesolaris.DynamicLoading
             _innerValue = template;
         }
 
+        /// <summary>
+        /// Creates a machine-readable object representation
+        /// </summary>
+        /// <returns>A machine-readable object representation as a string</returns>
         public string ToParsableString()
             => _innerValue.ToParsableString();
 
+        /// <summary>
+        /// Converts id object to id template object. Always successful
+        /// </summary>
+        /// <returns>A converted object</returns>
+        public DynamicEntityIdTemplate ToTemplate()
+            => _innerValue;
+
+        /// <summary>
+        /// Returns the human-readable object representation
+        /// </summary>
+        /// <returns>String containing the object representation</returns>
+        public override string ToString()
+            => _innerValue.ToString();
+
+        /// <summary>
+        /// Tries to parse a machine-readable ID representation
+        /// </summary>
+        /// <param name="text">An object representation</param>
+        /// <param name="value">A parsed value</param>
+        /// <returns>A result of the operation</returns>
         public static bool TryParse(ReadOnlySpan<char> text, out DynamicEntityId value)
         {
             value = default;
@@ -43,6 +83,12 @@ namespace Eyesolaris.DynamicLoading
             return true;
         }
 
+        /// <summary>
+        /// Parses a machine-readable ID representation. Throws if unsuccessful
+        /// </summary>
+        /// <param name="text">An object representation</param>
+        /// <returns>A parsed object</returns>
+        /// <exception cref="FormatException">A text has an invalid or unsupported format</exception>
         public static DynamicEntityId Parse(ReadOnlySpan<char> text)
         {
             DynamicEntityIdTemplate template = DynamicEntityIdTemplate.Parse(text);

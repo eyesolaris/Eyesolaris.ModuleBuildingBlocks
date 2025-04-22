@@ -88,33 +88,56 @@ namespace Eyesolaris.DynamicLoading
         public bool Equals(DynamicEntityIdTemplate other)
             => other.Name == Name && other.Version == Version;
 
+        /// <summary>
+        /// Returns the human-readable object representation
+        /// </summary>
+        /// <returns>String containing the object representation</returns>
         public override string ToString()
         {
             if (Name is null)
             {
-                return string.Empty;
+                return "(any entity)";
             }
             else if (Version is null)
             {
                 return Name;
             }
-            return $"{Name} {Version}";
+            return $"{Name} v.{Version}";
         }
 
+        /// <summary>
+        /// Creates a machine-readable object representation
+        /// </summary>
+        /// <returns>A machine-readable object representation as a string</returns>
         public string ToParsableString()
         {
             if (Name is null && Version is null)
             {
                 return string.Empty;
             }
-            if (Version is null)
+            if (Version is null && Name is not null)
             {
                 return Name!;
             }
             else
             {
-                return $"{Name}{SPLITTER}{Version.ToNormalizedString()}";
+                return $"{Name}{SPLITTER}{Version!.ToNormalizedString()}";
             }
+        }
+
+        /// <summary>
+        /// Converts a tempalte id object to an id object. Unsuccsessful
+        /// when the template has omissions 
+        /// </summary>
+        /// <returns>A converted object</returns>
+        /// <exception cref="InvalidOperationException">A template has omissions</exception>
+        public DynamicEntityId ToId()
+        {
+            if (Name is null || Version is null)
+            {
+                throw new InvalidOperationException("Template has omissions");
+            }
+            return new DynamicEntityId(Name, Version);
         }
 
         /// <summary>
