@@ -39,11 +39,11 @@ namespace Eyesolaris.DynamicLoading
         public static string ToNormalizedString(this Version version)
         {
             int fieldCount = 4;
-            if (version.Revision == 0 && version.Build == 0)
+            if (version.Revision <= 0 && version.Build <= 0)
             {
                 fieldCount = 2;
             }
-            else if (version.Revision == 0)
+            else if (version.Revision <= 0)
             {
                 fieldCount = 3;
             }
@@ -53,7 +53,7 @@ namespace Eyesolaris.DynamicLoading
         public static Version ParseAsNormalized(string versionString)
         {
             Version temp = Version.Parse(versionString);
-            if (temp.Build == 0 && temp.Revision == 0)
+            if (temp.Build <= 0 && temp.Revision <= 0)
             {
                 return new Version(temp.Major, temp.Minor);
             }
@@ -66,12 +66,12 @@ namespace Eyesolaris.DynamicLoading
 
         public static Version Normalize(this Version version)
         {
-            if (version.Build == 0 && version.Revision == 0)
+            if (version.Build <= 0 && version.Revision <= 0)
             {
                 return new Version(version.Major, version.Minor);
             }
 
-            else if (version.Revision == 0)
+            else if (version.Revision <= 0)
             {
                 return new Version(version.Major, version.Minor, version.Build);
             }
