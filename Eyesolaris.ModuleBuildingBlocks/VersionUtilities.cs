@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Eyesolaris.DynamicLoading
 
         public static Version GetTypeAssemblyVersion(this Type type, bool normalize = true)
         {
+            ArgumentNullException.ThrowIfNull(type, nameof(type));
             AssemblyName typeAssemblyName = type.Assembly.GetName();
             Version ver = typeAssemblyName.Version ?? DefaultVersionValue;
             if (normalize)
@@ -36,8 +38,16 @@ namespace Eyesolaris.DynamicLoading
             return GetTypeAssemblyVersion(obj.GetType(), normalize);
         }
 
-        public static string ToNormalizedString(this Version version)
+        public static Version GetTypeAssemblyVersion<T>(bool normalize = true)
+            => GetTypeAssemblyVersion(typeof(T), normalize);
+
+        [return: NotNullIfNotNull(nameof(version))]
+        public static string? ToNormalizedString(this Version? version)
         {
+            if (version is null)
+            {
+                return null;
+            }
             int fieldCount = 4;
             if (version.Revision <= 0 && version.Build <= 0)
             {
@@ -51,21 +61,29 @@ namespace Eyesolaris.DynamicLoading
         }
 
         public static Version ParseAsNormalized(string versionString)
+            => ParseAsNormalized(versionString.AsSpan());
+
+        public static Version ParseAsNormalized(ReadOnlySpan<char> versionString)
+            => Version.Parse(versionString).Normalize();
+
+        public static bool TryParseAsNormalized(ReadOnlySpan<char> versionString, [NotNullWhen(true)] out Version? result)
         {
-            Version temp = Version.Parse(versionString);
-            if (temp.Build <= 0 && temp.Revision <= 0)
+            if (!Version.TryParse(versionString, out Version? temp))
             {
-                return new Version(temp.Major, temp.Minor);
+                result = null;
+                return false;
             }
-            else if (temp.Revision == 0)
-            {
-                return new Version(temp.Major, temp.Minor, temp.Build);
-            }
-            return temp;
+            result = temp.Normalize();
+            return true;
         }
 
-        public static Version Normalize(this Version version)
+        [return: NotNullIfNotNull(nameof(version))]
+        public static Version? Normalize(this Version? version)
         {
+            if (version is null)
+            {
+                return null;
+            }
             if (version.Build <= 0 && version.Revision <= 0)
             {
                 return new Version(version.Major, version.Minor);
@@ -78,8 +96,13 @@ namespace Eyesolaris.DynamicLoading
             return version;
         }
 
-        public static string NormalizeString(string versionString)
+        [return: NotNullIfNotNull(nameof(versionString))]
+        public static string? NormalizeString(string? versionString)
         {
+            if (versionString is null)
+            {
+                return null;
+            }
             Version tmpVersion = Version.Parse(versionString);
             tmpVersion = tmpVersion.Normalize();
             return tmpVersion.ToString();

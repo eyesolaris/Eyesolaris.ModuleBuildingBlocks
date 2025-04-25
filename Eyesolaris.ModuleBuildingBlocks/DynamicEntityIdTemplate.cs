@@ -159,12 +159,12 @@ namespace Eyesolaris.DynamicLoading
             {
                 ReadOnlySpan<char> idRaw = text[..splitterIndex];
                 ReadOnlySpan<char> versionRaw = text[(splitterIndex + 1)..];
-                if (!Version.TryParse(versionRaw, out Version? version))
+                if (!VersionUtilities.TryParseAsNormalized(versionRaw, out Version? version))
                 {
                     value = default;
                     return false;
                 }
-                value = new(idRaw.ToString(), version);
+                value = new(idRaw.ToString(), version.Normalize());
                 return true;
             }
             value = new(text.ToString());

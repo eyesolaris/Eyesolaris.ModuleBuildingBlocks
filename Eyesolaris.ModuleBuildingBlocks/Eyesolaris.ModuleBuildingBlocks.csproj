@@ -8,8 +8,8 @@
     <Title>Eyesolaris's Dynamic Module Library</Title>
     <Description>Eyesolaris's Library for Dynamic Objects and Modules</Description>
     <Authors>Eyesolaris</Authors>
-	  <Version>2.1.1</Version>
-	  <AssemblyVersion>2.1.1</AssemblyVersion>
+	  <Version>2.2.0</Version>
+	  <AssemblyVersion>2.2.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
