@@ -192,7 +192,7 @@ namespace Eyesolaris.DynamicLoading
                 Version version;
                 try
                 {
-                    version = Version.Parse(versionRaw);
+                    version = VersionUtilities.ParseAsNormalized(versionRaw);
                 }
                 catch (Exception ex)
                 {
